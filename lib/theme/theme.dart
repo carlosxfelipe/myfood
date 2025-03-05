@@ -5,9 +5,9 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.light(
-        primary: Colors.blue.shade600, // Azul padrão do iOS
+        primary: Colors.red.shade600, // Azul padrão do iOS
         onPrimary: Colors.white,
-        secondary: Colors.blue.shade400,
+        secondary: Colors.red.shade400,
         surface: Colors.white,
         onSurface: Colors.black,
       ),
@@ -28,9 +28,9 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.dark(
-        primary: Colors.blue.shade300,
+        primary: Colors.red.shade300,
         onPrimary: Colors.black,
-        secondary: Colors.blue.shade200,
+        secondary: Colors.red.shade200,
         surface: const Color(0xFF1C1C1E), // Fundo do iOS Dark Mode
         onSurface: Colors.white,
       ),
