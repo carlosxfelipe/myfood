@@ -155,6 +155,7 @@ class PriceTag extends StatelessWidget {
     final textColor = Theme.of(context).colorScheme.onSurface;
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           'R\$ ${pricePerUnit.toStringAsFixed(2).replaceAll('.', ',')}',
@@ -164,35 +165,37 @@ class PriceTag extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          constraints: const BoxConstraints(minWidth: 120),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color:
-                isDarkMode
-                    ? Colors.greenAccent.withAlpha(50)
-                    : Colors.green.withAlpha(50),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.shopping_cart,
-                size: 16,
-                color: isDarkMode ? Colors.greenAccent : Colors.green.shade800,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                'R\$ ${totalPrice.toStringAsFixed(2).replaceAll('.', ',')}',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+        Flexible(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color:
+                  isDarkMode
+                      ? Colors.greenAccent.withAlpha(50)
+                      : Colors.green.withAlpha(50),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 4,
+              children: [
+                Icon(
+                  Icons.shopping_cart,
+                  size: 16,
                   color:
                       isDarkMode ? Colors.greenAccent : Colors.green.shade800,
                 ),
-              ),
-            ],
+                Text(
+                  'R\$ ${totalPrice.toStringAsFixed(2).replaceAll('.', ',')}',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color:
+                        isDarkMode ? Colors.greenAccent : Colors.green.shade800,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
