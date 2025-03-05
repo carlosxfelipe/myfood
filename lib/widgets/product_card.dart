@@ -166,7 +166,7 @@ class PriceTag extends StatelessWidget {
         const SizedBox(width: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          constraints: const BoxConstraints(minWidth: 130),
+          constraints: const BoxConstraints(minWidth: 120),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color:
@@ -275,16 +275,16 @@ class ProductActions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.add_shopping_cart,
                 size: 20,
-                color: Colors.white,
+                color: colorScheme.onPrimary,
               ),
               const SizedBox(width: 8),
               Text(
                 'ADICIONAR',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Colors.white,
+                  color: colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 15.0,
                 ),
