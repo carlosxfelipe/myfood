@@ -8,12 +8,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomConvexBottomBar(
       currentIndex: 0, // Índice correspondente ao botão "Início"
-      child: Scaffold(
-        // appBar: AppBar(title: const Text('Home Screen')),
-        appBar: CustomAppBar(),
-        // body: const Center(child: Text('Hello World!')),
-        body: HomeBody(),
-      ),
+      child: Scaffold(appBar: CustomAppBar(), body: HomeBody()),
     );
   }
 }
@@ -25,7 +20,7 @@ class HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16, top: 16),
-      child: Align(alignment: Alignment.topLeft, child: Text('Hello World!')),
+      child: Align(alignment: Alignment.topLeft, child: Text('Início')),
     );
   }
 }
