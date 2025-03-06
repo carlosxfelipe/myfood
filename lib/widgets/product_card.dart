@@ -168,6 +168,7 @@ class PriceTag extends StatelessWidget {
         Flexible(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            constraints: const BoxConstraints(minWidth: 80),
             decoration: BoxDecoration(
               color:
                   isDarkMode
@@ -175,10 +176,9 @@ class PriceTag extends StatelessWidget {
                       : Colors.green.withAlpha(50),
               borderRadius: BorderRadius.circular(24),
             ),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 4,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.shopping_cart,
@@ -186,6 +186,7 @@ class PriceTag extends StatelessWidget {
                   color:
                       isDarkMode ? Colors.greenAccent : Colors.green.shade800,
                 ),
+                const SizedBox(width: 4),
                 Text(
                   'R\$ ${totalPrice.toStringAsFixed(2).replaceAll('.', ',')}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
