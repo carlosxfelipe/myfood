@@ -73,6 +73,15 @@ class OrdersBody extends StatelessWidget {
       "Cancelado",
     ];
 
+    final Map<String, Color> tagColors = {
+      "Todos": Colors.blue,
+      "Entregue": Colors.green,
+      "Em andamento": Colors.amber,
+      "Cancelado": Colors.red,
+    };
+
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     final filteredOrders =
         selectedStatus == "Todos"
             ? orders
@@ -81,7 +90,7 @@ class OrdersBody extends StatelessWidget {
                 .toList();
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -90,20 +99,44 @@ class OrdersBody extends StatelessWidget {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          DropdownButton<String>(
-            value: selectedStatus,
-            items:
-                statuses.map((String status) {
-                  return DropdownMenuItem<String>(
-                    value: status,
-                    child: Text(status),
-                  );
-                }).toList(),
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                onStatusChanged(newValue);
-              }
-            },
+          SizedBox(
+            height: 48,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children:
+                    statuses.map((status) {
+                      final isSelected = selectedStatus == status;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isSelected
+                                    ? tagColors[status]
+                                    : isDarkMode
+                                    ? Colors.grey[800]
+                                    : Colors.grey[200],
+                            foregroundColor:
+                                isSelected
+                                    ? (isDarkMode ? Colors.black : Colors.white)
+                                    : (isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
+                            shadowColor: Colors.transparent,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ),
+                          ),
+                          onPressed: () => onStatusChanged(status),
+                          child: Text(status),
+                        ),
+                      );
+                    }).toList(),
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           Expanded(
