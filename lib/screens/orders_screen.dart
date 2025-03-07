@@ -152,6 +152,7 @@ class OrderCard extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    constraints: const BoxConstraints(minWidth: 160),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 4,
@@ -174,6 +175,7 @@ class OrderCard extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: tagTextColor,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
