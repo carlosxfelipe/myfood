@@ -127,15 +127,9 @@ class OrderCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Container(
         decoration: BoxDecoration(
+          color:
+              isDarkMode ? Colors.grey[800] : Colors.grey[100], // Fundo sólido
           borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            colors:
-                isDarkMode
-                    ? [Colors.grey[800]!, Colors.grey[900]!]
-                    : [Colors.grey[100]!, Colors.grey[200]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
