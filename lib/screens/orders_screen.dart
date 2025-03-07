@@ -93,19 +93,34 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    Color statusColor;
+    Color tagBackground;
+    Color tagTextColor;
+
     switch (status) {
       case "Entregue":
-        statusColor = Colors.green;
+        tagBackground =
+            isDarkMode
+                ? Colors.greenAccent.withAlpha(50)
+                : Colors.green.withAlpha(50);
+        tagTextColor = isDarkMode ? Colors.greenAccent : Colors.green.shade800;
         break;
       case "Em andamento":
-        statusColor = Colors.orange;
+        tagBackground =
+            isDarkMode
+                ? Colors.amberAccent.withAlpha(50)
+                : Colors.amber.withAlpha(50);
+        tagTextColor = isDarkMode ? Colors.amberAccent : Colors.amber.shade800;
         break;
       case "Cancelado":
-        statusColor = Colors.red;
+        tagBackground =
+            isDarkMode
+                ? Colors.redAccent.withAlpha(50)
+                : Colors.red.withAlpha(50);
+        tagTextColor = isDarkMode ? Colors.redAccent : Colors.red.shade800;
         break;
       default:
-        statusColor = Colors.grey;
+        tagBackground = Colors.grey.withAlpha(50);
+        tagTextColor = Colors.grey.shade800;
     }
 
     return Padding(
@@ -136,11 +151,31 @@ class OrderCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    status,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: statusColor,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: tagBackground,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.circle, size: 12, color: tagTextColor),
+                        const SizedBox(width: 4),
+                        Text(
+                          status,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: tagTextColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
