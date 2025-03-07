@@ -1,20 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:myfood/widgets.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  String _selectedStatus = "Todos";
 
   @override
   Widget build(BuildContext context) {
     return CustomConvexBottomBar(
       currentIndex: 2, // Índice correspondente ao botão "Pedidos"
-      child: Scaffold(appBar: CustomAppBar(), body: const OrdersBody()),
+      child: Scaffold(
+        appBar: CustomAppBar(),
+        body: OrdersBody(
+          selectedStatus: _selectedStatus,
+          onStatusChanged: (String newStatus) {
+            setState(() {
+              _selectedStatus = newStatus;
+            });
+          },
+        ),
+      ),
     );
   }
 }
 
 class OrdersBody extends StatelessWidget {
-  const OrdersBody({super.key});
+  final String selectedStatus;
+  final Function(String) onStatusChanged;
+
+  const OrdersBody({
+    super.key,
+    required this.selectedStatus,
+    required this.onStatusChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +66,20 @@ class OrdersBody extends StatelessWidget {
       },
     ];
 
+    final List<String> statuses = [
+      "Todos",
+      "Entregue",
+      "Em andamento",
+      "Cancelado",
+    ];
+
+    final filteredOrders =
+        selectedStatus == "Todos"
+            ? orders
+            : orders
+                .where((order) => order["status"] == selectedStatus)
+                .toList();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -52,11 +90,27 @@ class OrdersBody extends StatelessWidget {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
+          DropdownButton<String>(
+            value: selectedStatus,
+            items:
+                statuses.map((String status) {
+                  return DropdownMenuItem<String>(
+                    value: status,
+                    child: Text(status),
+                  );
+                }).toList(),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                onStatusChanged(newValue);
+              }
+            },
+          ),
+          const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
-              itemCount: orders.length,
+              itemCount: filteredOrders.length,
               itemBuilder: (context, index) {
-                final order = orders[index];
+                final order = filteredOrders[index];
                 return OrderCard(
                   orderId: order["id"],
                   status: order["status"],
@@ -127,8 +181,7 @@ class OrderCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Container(
         decoration: BoxDecoration(
-          color:
-              isDarkMode ? Colors.grey[800] : Colors.grey[100], // Fundo sólido
+          color: isDarkMode ? Colors.grey[800] : Colors.grey[100],
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
