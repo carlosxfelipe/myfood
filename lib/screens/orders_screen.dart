@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myfood/utils/color_utils.dart';
 import 'package:myfood/widgets.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -80,6 +81,13 @@ class OrdersBody extends StatelessWidget {
       "Cancelado": Colors.red,
     };
 
+    final Map<String, Color> tagColorsAccent = {
+      "Todos": Colors.blueAccent.shade100,
+      "Entregue": Colors.greenAccent.shade100,
+      "Em andamento": Colors.amberAccent.shade100,
+      "Cancelado": Colors.redAccent.shade100,
+    };
+
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final filteredOrders =
@@ -107,22 +115,27 @@ class OrdersBody extends StatelessWidget {
                 children:
                     statuses.map((status) {
                       final isSelected = selectedStatus == status;
+                      final buttonBackgroundColor =
+                          isSelected
+                              ? isDarkMode
+                                  ? darken(tagColors[status]!, 0.3)
+                                  : tagColors[status]!.withAlpha(10)
+                              : (isDarkMode
+                                  ? Colors.grey[800]!
+                                  : Colors.grey[200]!);
+                      final buttonForegroundColor =
+                          isSelected
+                              ? (isDarkMode
+                                  ? tagColorsAccent[status]!
+                                  : tagColors[status]!)
+                              : (isDarkMode ? Colors.white : Colors.black);
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                isSelected
-                                    ? tagColors[status]
-                                    : isDarkMode
-                                    ? Colors.grey[800]
-                                    : Colors.grey[200],
-                            foregroundColor:
-                                isSelected
-                                    ? (isDarkMode ? Colors.black : Colors.white)
-                                    : (isDarkMode
-                                        ? Colors.white
-                                        : Colors.black),
+                            backgroundColor: buttonBackgroundColor,
+                            foregroundColor: buttonForegroundColor,
                             shadowColor: Colors.transparent,
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(
