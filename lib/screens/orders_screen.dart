@@ -65,6 +65,20 @@ class OrdersBody extends StatelessWidget {
         "total": 78.20,
         "items": "3 itens",
       },
+      {
+        "id": "#12348",
+        "status": "Entregue",
+        "date": "07/03/2025",
+        "total": 45.30,
+        "items": "2 itens",
+      },
+      {
+        "id": "#12349",
+        "status": "Em andamento",
+        "date": "08/03/2025",
+        "total": 60.75,
+        "items": "4 itens",
+      },
     ];
 
     final List<String> statuses = [
@@ -98,7 +112,7 @@ class OrdersBody extends StatelessWidget {
                 .toList();
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -193,41 +207,32 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    Color tagBackground;
-    Color tagTextColor;
+    Color backgroundColor;
+    Color textColor;
 
     switch (status) {
       case "Entregue":
-        tagBackground =
-            isDarkMode
-                ? Colors.greenAccent.withAlpha(50)
-                : Colors.green.withAlpha(50);
-        tagTextColor = isDarkMode ? Colors.greenAccent : Colors.green.shade800;
+        backgroundColor = Colors.green.withAlpha(50);
+        textColor = isDarkMode ? Colors.white : Colors.green.shade800;
         break;
       case "Em andamento":
-        tagBackground =
-            isDarkMode
-                ? Colors.amberAccent.withAlpha(50)
-                : Colors.amber.withAlpha(50);
-        tagTextColor = isDarkMode ? Colors.amberAccent : Colors.amber.shade800;
+        backgroundColor = Colors.amber.withAlpha(50);
+        textColor = isDarkMode ? Colors.white : Colors.amber.shade800;
         break;
       case "Cancelado":
-        tagBackground =
-            isDarkMode
-                ? Colors.redAccent.withAlpha(50)
-                : Colors.red.withAlpha(50);
-        tagTextColor = isDarkMode ? Colors.redAccent : Colors.red.shade800;
+        backgroundColor = Colors.red.withAlpha(50);
+        textColor = isDarkMode ? Colors.white : Colors.red.shade800;
         break;
       default:
-        tagBackground = Colors.grey.withAlpha(50);
-        tagTextColor = Colors.grey.shade800;
+        backgroundColor = Colors.grey.withAlpha(50);
+        textColor = isDarkMode ? Colors.white : Colors.black;
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: isDarkMode ? Colors.grey[800] : Colors.grey[100],
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
@@ -242,48 +247,31 @@ class OrderCard extends StatelessWidget {
                     orderId,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    constraints: const BoxConstraints(minWidth: 160),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: tagBackground,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.circle, size: 12, color: tagTextColor),
-                        const SizedBox(width: 4),
-                        Text(
-                          status,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: tagTextColor,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                      color: textColor,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text('Data: $date', style: Theme.of(context).textTheme.bodySmall),
-              Text(items, style: Theme.of(context).textTheme.bodySmall),
+              Text(
+                'Data: $date',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: textColor),
+              ),
+              Text(
+                items,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: textColor),
+              ),
               const SizedBox(height: 8),
               Text(
                 'Total: R\$ ${total.toStringAsFixed(2).replaceAll(".", ",")}',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ],
           ),
