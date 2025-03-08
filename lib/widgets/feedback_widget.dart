@@ -9,10 +9,17 @@ class FeedbackWidget extends StatefulWidget {
 
 class _FeedbackWidgetState extends State<FeedbackWidget> {
   bool _isVisible = true;
+  bool? _feedbackGiven; // true para gostei, false para não gostei
 
-  void _hideWidget() {
+  void _giveFeedback(bool liked) {
     setState(() {
-      _isVisible = false;
+      _feedbackGiven = liked;
+    });
+
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _isVisible = false;
+      });
     });
   }
 
@@ -26,53 +33,66 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                "O que achou dessas recomendações?",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: textColor,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity:
+            _feedbackGiven == null
+                ? 1.0
+                : 0.5, // Reduz opacidade ao dar feedback
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  _feedbackGiven == null
+                      ? "O que achou dessas recomendações?"
+                      : "Obrigado pelo feedback!",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: textColor,
+                  ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.thumb_up_outlined,
-                    color: Colors.green,
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      _feedbackGiven == true
+                          ? Icons.thumb_up
+                          : Icons.thumb_up_outlined,
+                      color: Colors.green,
+                    ),
+                    onPressed:
+                        _feedbackGiven == null
+                            ? () => _giveFeedback(true)
+                            : null,
                   ),
-                  onPressed: () {
-                    debugPrint("Gostei");
-                    _hideWidget();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.thumb_down_outlined,
-                    color: Colors.red.shade400,
+                  IconButton(
+                    icon: Icon(
+                      _feedbackGiven == false
+                          ? Icons.thumb_down
+                          : Icons.thumb_down_outlined,
+                      color: Colors.red.shade400,
+                    ),
+                    onPressed:
+                        _feedbackGiven == null
+                            ? () => _giveFeedback(false)
+                            : null,
                   ),
-                  onPressed: () {
-                    debugPrint("Não gostei");
-                    _hideWidget();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.close, color: textColor),
-                  onPressed: _hideWidget,
-                ),
-              ],
-            ),
-          ],
+                  IconButton(
+                    icon: Icon(Icons.close, color: textColor),
+                    onPressed: () => setState(() => _isVisible = false),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
