@@ -4,12 +4,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final String? address;
   final VoidCallback? onAddressTap;
+  final ValueChanged<String>? onSearchChanged;
 
   const CustomAppBar({
     super.key,
     this.showBackButton = false,
     this.address,
     this.onAddressTap,
+    this.onSearchChanged,
   });
 
   @override
@@ -32,7 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title:
           address != null
               ? AddressAppBarContent(address: address!, onTap: onAddressTap)
-              : const SearchAppBarContent(),
+              : SearchAppBarContent(onSearchChanged: onSearchChanged),
       centerTitle: address != null,
       actions: [
         IconButton(
@@ -86,7 +88,9 @@ class AddressAppBarContent extends StatelessWidget {
 }
 
 class SearchAppBarContent extends StatelessWidget {
-  const SearchAppBarContent({super.key});
+  final ValueChanged<String>? onSearchChanged;
+
+  const SearchAppBarContent({super.key, this.onSearchChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +100,7 @@ class SearchAppBarContent extends StatelessWidget {
     return SizedBox(
       height: 45,
       child: TextField(
+        onChanged: onSearchChanged,
         decoration: InputDecoration(
           hintText: 'Buscar...',
           hintStyle: TextStyle(
