@@ -17,7 +17,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return CustomConvexBottomBar(
       currentIndex: 2, // Índice correspondente ao botão "Pedidos"
       child: Scaffold(
-        appBar: CustomAppBar(),
+        appBar: SearchAppBar(),
         body: OrdersBody(
           selectedStatus: _selectedStatus,
           onStatusChanged: (String newStatus) {

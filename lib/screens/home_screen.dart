@@ -9,10 +9,9 @@ class HomeScreen extends StatelessWidget {
     return CustomConvexBottomBar(
       currentIndex: 0, // Índice correspondente ao botão "Início"
       child: Scaffold(
-        appBar: CustomAppBar(
-          showBackButton: false,
+        appBar: AddressAppBar(
           address: "Rua das Flores, 123",
-          onAddressTap: () => debugPrint('Endereço tocado!'),
+          // onAddressTap: () => debugPrint('Endereço tocado!'),
         ),
         body: const HomeBody(),
       ),

@@ -15,7 +15,7 @@ class SearchScreen extends StatelessWidget {
           return CustomConvexBottomBar(
             currentIndex: 1, // Índice correspondente ao botão "Busca"
             child: Scaffold(
-              appBar: CustomAppBar(
+              appBar: SearchAppBar(
                 onSearchChanged: searchProvider.searchPokemon,
               ),
               body:
