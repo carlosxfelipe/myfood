@@ -21,12 +21,19 @@ class SearchScreen extends StatelessWidget {
               body:
                   searchProvider.isLoading
                       ? const Center(child: CircularProgressIndicator())
-                      : ListView.builder(
+                      : GridView.builder(
+                        padding: const EdgeInsets.all(8),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.9,
+                            ),
                         itemCount: searchProvider.results.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(searchProvider.results[index]),
-                          );
+                          final pokemon = searchProvider.results[index];
+                          return PokemonCard(pokemon: pokemon);
                         },
                       ),
             ),

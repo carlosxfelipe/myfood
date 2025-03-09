@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class SearchProvider extends ChangeNotifier {
   final Dio _dio = Dio();
-  List<String> _results = [];
+  List<Pokemon> _results = [];
   bool _isLoading = false;
 
-  List<String> get results => _results;
+  List<Pokemon> get results => _results;
   bool get isLoading => _isLoading;
 
   Future<void> searchPokemon(String query) async {
@@ -26,7 +26,7 @@ class SearchProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List pokemons = response.data['results'];
-        _results =
+        final filteredPokemons =
             pokemons
                 .where(
                   (pokemon) => pokemon['name']
@@ -34,8 +34,19 @@ class SearchProvider extends ChangeNotifier {
                       .toLowerCase()
                       .contains(query.toLowerCase()),
                 )
-                .map<String>((pokemon) => pokemon['name'].toString())
                 .toList();
+
+        List<Pokemon> pokemonDetails = [];
+
+        for (var pokemon in filteredPokemons) {
+          final detailsResponse = await _dio.get(pokemon['url']);
+          if (detailsResponse.statusCode == 200) {
+            final data = detailsResponse.data;
+            pokemonDetails.add(Pokemon.fromJson(data));
+          }
+        }
+
+        _results = pokemonDetails;
       }
     } catch (e) {
       _results = [];
@@ -43,5 +54,24 @@ class SearchProvider extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+  }
+}
+
+class Pokemon {
+  final String name;
+  final String imageUrl;
+  final List<String> types;
+
+  Pokemon({required this.name, required this.imageUrl, required this.types});
+
+  factory Pokemon.fromJson(Map<String, dynamic> json) {
+    return Pokemon(
+      name: json['name'],
+      imageUrl: json['sprites']['front_default'],
+      types:
+          (json['types'] as List)
+              .map((type) => type['type']['name'].toString())
+              .toList(),
+    );
   }
 }
