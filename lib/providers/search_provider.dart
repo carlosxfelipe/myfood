@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -5,55 +6,60 @@ class SearchProvider extends ChangeNotifier {
   final Dio _dio = Dio();
   List<Pokemon> _results = [];
   bool _isLoading = false;
+  Timer? _debounce;
 
   List<Pokemon> get results => _results;
   bool get isLoading => _isLoading;
 
-  Future<void> searchPokemon(String query) async {
-    if (query.isEmpty) {
-      _results = [];
-      notifyListeners();
-      return;
-    }
+  void searchPokemon(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      final response = await _dio.get(
-        'https://pokeapi.co/api/v2/pokemon?limit=1000',
-      );
-
-      if (response.statusCode == 200) {
-        final List pokemons = response.data['results'];
-        final filteredPokemons =
-            pokemons
-                .where(
-                  (pokemon) => pokemon['name']
-                      .toString()
-                      .toLowerCase()
-                      .contains(query.toLowerCase()),
-                )
-                .toList();
-
-        List<Pokemon> pokemonDetails = [];
-
-        for (var pokemon in filteredPokemons) {
-          final detailsResponse = await _dio.get(pokemon['url']);
-          if (detailsResponse.statusCode == 200) {
-            final data = detailsResponse.data;
-            pokemonDetails.add(Pokemon.fromJson(data));
-          }
-        }
-
-        _results = pokemonDetails;
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (query.isEmpty) {
+        _results = [];
+        notifyListeners();
+        return;
       }
-    } catch (e) {
-      _results = [];
-    }
 
-    _isLoading = false;
-    notifyListeners();
+      _isLoading = true;
+      notifyListeners();
+
+      try {
+        final response = await _dio.get(
+          'https://pokeapi.co/api/v2/pokemon?limit=1000',
+        );
+
+        if (response.statusCode == 200) {
+          final List pokemons = response.data['results'];
+          final filteredPokemons =
+              pokemons
+                  .where(
+                    (pokemon) => pokemon['name']
+                        .toString()
+                        .toLowerCase()
+                        .contains(query.toLowerCase()),
+                  )
+                  .toList();
+
+          List<Pokemon> pokemonDetails = [];
+
+          for (var pokemon in filteredPokemons) {
+            final detailsResponse = await _dio.get(pokemon['url']);
+            if (detailsResponse.statusCode == 200) {
+              final data = detailsResponse.data;
+              pokemonDetails.add(Pokemon.fromJson(data));
+            }
+          }
+
+          _results = pokemonDetails;
+        }
+      } catch (e) {
+        _results = [];
+      }
+
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 }
 

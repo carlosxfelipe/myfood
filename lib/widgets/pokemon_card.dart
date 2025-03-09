@@ -10,33 +10,38 @@ class PokemonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: _getTypeColor(pokemon.types.first),
       elevation: 5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.network(
-            pokemon.imageUrl,
-            height: 80,
-            width: 80,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            pokemon.name.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: _getGradient(pokemon.types),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              pokemon.imageUrl,
+              height: 80,
+              width: 80,
+              fit: BoxFit.contain,
             ),
-          ),
-          const SizedBox(height: 5),
-          Wrap(
-            spacing: 4,
-            children:
-                pokemon.types.map((type) => _buildTypeChip(type)).toList(),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              pokemon.name.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Wrap(
+              spacing: 4,
+              children:
+                  pokemon.types.map((type) => _buildTypeChip(type)).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -49,6 +54,26 @@ class PokemonCard extends StatelessWidget {
       ),
       backgroundColor: _getTypeColor(type),
     );
+  }
+
+  /// Se o Pokémon tiver 2 tipos, cria um gradiente. Se tiver 1 tipo, usa apenas essa cor com variação no alpha.
+  LinearGradient _getGradient(List<String> types) {
+    if (types.length > 1) {
+      return LinearGradient(
+        colors: types.map((type) => _getTypeColor(type)).toList(),
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+    } else {
+      return LinearGradient(
+        colors: [
+          _getTypeColor(types.first),
+          _getTypeColor(types.first).withAlpha(200),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+    }
   }
 
   Color _getTypeColor(String type) {
