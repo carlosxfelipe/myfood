@@ -47,6 +47,10 @@ class PokemonDetailScreen extends StatelessWidget {
                             style: const TextStyle(color: Colors.white),
                           ),
                           backgroundColor: _getTypeColor(type),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(color: Colors.transparent),
+                          ),
                         ),
                       )
                       .toList(),

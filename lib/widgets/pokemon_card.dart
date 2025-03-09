@@ -45,11 +45,6 @@ class PokemonCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 5),
-              Wrap(
-                spacing: 4,
-                children:
-                    pokemon.types.map((type) => _buildTypeChip(type)).toList(),
-              ),
             ],
           ),
         ),
@@ -57,17 +52,6 @@ class PokemonCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTypeChip(String type) {
-    return Chip(
-      label: Text(
-        type.toUpperCase(),
-        style: const TextStyle(fontSize: 12, color: Colors.white),
-      ),
-      backgroundColor: _getTypeColor(type),
-    );
-  }
-
-  /// Se o Pokémon tiver 2 tipos, cria um gradiente. Se tiver 1 tipo, usa apenas essa cor com variação no alpha.
   LinearGradient _getGradient(List<String> types) {
     if (types.length > 1) {
       return LinearGradient(
