@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myfood/providers/search_provider.dart';
+import 'package:myfood/screens.dart';
 
 class PokemonCard extends StatelessWidget {
   final Pokemon pokemon;
@@ -8,39 +9,49 @@ class PokemonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 5,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: _getGradient(pokemon.types),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              pokemon.imageUrl,
-              height: 80,
-              width: 80,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              pokemon.name.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PokemonDetailScreen(pokemon: pokemon),
+          ),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 5,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient: _getGradient(pokemon.types),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                pokemon.imageUrl,
+                height: 80,
+                width: 80,
+                fit: BoxFit.contain,
               ),
-            ),
-            const SizedBox(height: 5),
-            Wrap(
-              spacing: 4,
-              children:
-                  pokemon.types.map((type) => _buildTypeChip(type)).toList(),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                pokemon.name.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Wrap(
+                spacing: 4,
+                children:
+                    pokemon.types.map((type) => _buildTypeChip(type)).toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -77,7 +88,7 @@ class PokemonCard extends StatelessWidget {
   }
 
   Color _getTypeColor(String type) {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'fire':
         return Colors.redAccent;
       case 'water':
