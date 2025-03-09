@@ -9,16 +9,17 @@ class PokemonDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _getTypeColor(pokemon.types.first),
-      appBar: AppBar(
-        title: Text(pokemon.name.toUpperCase()),
-        backgroundColor: _getTypeColor(pokemon.types.first),
-        elevation: 0,
-      ),
-      body: Center(
+      body: Container(
+        decoration: BoxDecoration(gradient: _getGradient(pokemon.types)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            AppBar(
+              title: Text(pokemon.name.toUpperCase()),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+            const Spacer(),
             Image.network(
               pokemon.imageUrl,
               height: 200,
@@ -50,10 +51,30 @@ class PokemonDetailScreen extends StatelessWidget {
                       )
                       .toList(),
             ),
+            const Spacer(),
           ],
         ),
       ),
     );
+  }
+
+  LinearGradient _getGradient(List<String> types) {
+    if (types.length > 1) {
+      return LinearGradient(
+        colors: types.map((type) => _getTypeColor(type)).toList(),
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+    } else {
+      return LinearGradient(
+        colors: [
+          _getTypeColor(types.first),
+          _getTypeColor(types.first).withAlpha(200),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+    }
   }
 
   Color _getTypeColor(String type) {
