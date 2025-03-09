@@ -2,6 +2,8 @@
 
 Bem-vindo ao **myFood**! 🍹
 
+Acesse agora a versão web https://myfood2025.netlify.app/
+
 <p align="center">
   <img src="./605shots_so.png" alt="Preview do Projeto" />
 </p>
