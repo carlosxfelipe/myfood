@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:myfood/widgets.dart';
 import 'package:myfood/theme/theme_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -120,7 +121,19 @@ class ProfileInfo extends StatelessWidget {
             size: 18,
             color: Theme.of(context).iconTheme.color,
           ),
-          onTap: () {},
+          onTap: () async {
+            final Uri url = Uri.parse(
+              "https://github.com/carlosxfelipe/myfood",
+            );
+
+            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+              if (!context.mounted) return;
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Não foi possível abrir o link.")),
+              );
+            }
+          },
         ),
         const SizedBox(height: 10),
         SizedBox(
